@@ -1,44 +1,42 @@
-bool escolha = true; // Muda para false para correr a Tabuada
+bool escolha = true;
+bool jaCorreu = false;
 
-// ---- OLA MUNDO ----
-void olaMundo_setup() {
-  Serial.println("Ola Mundo!");
-}
-
-void olaMundo_loop() {
-  // Coloca aqui o conteúdo do loop do ola_mundo.ino
-}
-
-// ---- TABUADA ----
-void tabuada_setup() {
-  Serial.println("Tabuada:");
-  for (int i = 1; i <= 10; i++) {
-    Serial.print("2 x ");
-    Serial.print(i);
-    Serial.print(" = ");
-    Serial.println(2 * i);
-  }
-}
-
-void tabuada_loop() {
-  // Coloca aqui o conteúdo do loop do tabuada.ino
-}
-
-// ---- SETUP E LOOP PRINCIPAIS ----
 void setup() {
   Serial.begin(9600);
-
-  if (escolha == true) {
-    olaMundo_setup();
-  } else {
-    tabuada_setup();
-  }
+  Serial.println("Escreve 'true' ou 'false' e prime Enter:");
 }
 
 void loop() {
-  if (escolha == true) {
-    olaMundo_loop();
-  } else {
-    tabuada_loop();
+  if (Serial.available()) {
+    String input = Serial.readStringUntil('\n');
+    input.trim();
+
+    if (input == "true") {
+      escolha = true;
+      jaCorreu = false;
+    } else if (input == "false") {
+      escolha = false;
+      jaCorreu = false;
+    } else {
+      Serial.println("Comando invalido! Usa 'true' ou 'false'");
+      return;
+    }
+  }
+
+  if (!jaCorreu) {
+    if (escolha) {
+      // --- OLA MUNDO ---
+      Serial.println("Ola Mundo!");
+
+    } else {
+      // --- TABUADA ---
+      for (int i = 1; i <= 10; i++) {
+        Serial.print("2 x ");
+        Serial.print(i);
+        Serial.print(" = ");
+        Serial.println(2 * i);
+      }
+    }
+    jaCorreu = true;
   }
 }
